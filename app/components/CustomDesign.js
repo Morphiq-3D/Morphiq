@@ -4,7 +4,7 @@ import SplitText from "./SplitText";
 
 export default function CustomDesign() {
   return (
-    <section className="relative min-h-[500px] flex items-center justify-center px-4 sm:px-6 md:px-12 bg-black p-10">
+    <section className="relative min-h-[500px] flex items-center justify-center sm:px-6 md:px-12 bg-black p-10">
       <AnimatedContent
         distance={150}
         direction="vertical"
@@ -37,7 +37,7 @@ export default function CustomDesign() {
 
             {/* Button */}
             <button className="px-[20px] py-[12px] rounded-[15px] bg-gradient-to-br from-blue-600 to-cyan-400 text-white font-semibold md:text-[24px] shadow-md hover:scale-110 duration-300 transition">
-              Upload Design
+              Submit Idea
             </button>
           </div>
         </div>

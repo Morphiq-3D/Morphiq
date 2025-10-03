@@ -16,7 +16,7 @@ const AnimatedContent = ({
   scale = 1,
   threshold = 0.1,
   delay = 0,
-  onComplete
+  onComplete,
 }) => {
   const ref = useRef(null);
 
@@ -31,7 +31,7 @@ const AnimatedContent = ({
     gsap.set(el, {
       [axis]: offset,
       scale,
-      opacity: animateOpacity ? initialOpacity : 1
+      opacity: animateOpacity ? initialOpacity : 1,
     });
 
     gsap.to(el, {
@@ -46,12 +46,12 @@ const AnimatedContent = ({
         trigger: el,
         start: `top ${startPct}%`,
         toggleActions: 'play none none none',
-        once: true
-      }
+        once: true,
+      },
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      ScrollTrigger.getAll().forEach((t) => t.kill());
       gsap.killTweensOf(el);
     };
   }, [
@@ -65,10 +65,16 @@ const AnimatedContent = ({
     scale,
     threshold,
     delay,
-    onComplete
+    onComplete,
   ]);
 
-  return <div ref={ref}>{children}</div>;
+  return (
+    <div className="overflow-hidden">
+      <div ref={ref}>
+        {children}
+      </div>
+    </div>
+  );
 };
 
 export default AnimatedContent;
