@@ -1,36 +1,35 @@
 "use client";
 import Image from "next/image";
-import Dither from "./Dither"; // adjust path
-import AnimatedContent from "./AnimatedContent"; // adjust path
-import SplitText from "./SplitText"; // adjust path
+import AnimatedContent from "./AnimatedContent"; 
+import SplitText from "./SplitText"; 
 
 export default function Services() {
   const services = [
     {
       title: "Custom 3D Modeling",
       description:
-        "We design and create custom 3D models tailored to your unique requirements, from concept to prototype.",
+        "Our team crafts precise 3D models tailored to your vision, combining creativity with technical accuracy. From initial sketches to detailed digital prototypes, we bring your ideas to life in three dimensions.",
       image: "/service1.jpg",
       reverse: false,
     },
     {
       title: "Rapid Prototyping",
       description:
-        "Turn your ideas into functional prototypes quickly, with precision and high-quality finishes.",
+        "Quickly transform your concepts into functional prototypes using our advanced 3D printing techniques. We prioritize speed without compromising quality, helping you test, iterate, and refine your designs efficiently.",
       image: "/service2.jpg",
       reverse: true,
     },
     {
       title: "High-Quality Production",
       description:
-        "We use advanced materials and techniques to deliver durable, production-ready 3D prints.",
+        "We deliver durable, production-ready 3D prints using premium materials and meticulous processes. Every product is engineered for performance, precision, and lasting quality, ensuring your final output meets the highest standards.",
       image: "/service3.jpg",
       reverse: false,
     },
   ];
 
   return (
-    <section className="py-20 bg-[#00050D]">
+    <section className="py-20 bg-black">
       <div className="container mx-auto px-4 space-y-16">
         <h2 className="text-center text-4xl font-bold text-gray-100 mb-12">
           Our Services
@@ -51,21 +50,11 @@ export default function Services() {
                 `[data-service="${index}"] .split-text`
               );
               texts.forEach((el) => {
-                el.classList.add("animate-split"); // custom trigger class
+                el.classList.add("animate-split"); 
               });
             }}
           >
             <div className="relative rounded-2xl overflow-hidden shadow-lg">
-              {/* Dither Background */}
-              <div className="absolute inset-0 z-0">
-                <Dither
-                  waveColor={[0.1, 0.5, 0.6]}
-                  colorNum={5}
-                  pixelSize={2}
-                  disableAnimation={false}
-                />
-              </div>
-
               {/* Content */}
               <div
                 className={`relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center p-8`}
@@ -74,13 +63,15 @@ export default function Services() {
                 {/* Text */}
                 <div
                   className={`${
-                    service.reverse ? "md:order-2 md:text-left" : "md:order-1"
+                    service.reverse
+                      ? "md:order-2 order-2"  // desktop: right, mobile: bottom
+                      : "md:order-1 order-2"  // desktop: left, mobile: bottom
                   }`}
                 >
                   <SplitText
                     text={service.title}
                     tag="h3"
-                    className="text-3xl font-bold text-white mb-4 split-text"
+                    className="text-3xl font-bold text-white mb-4 split-text "
                     splitType="chars"
                     delay={50}
                     threshold={0.2}
@@ -88,7 +79,7 @@ export default function Services() {
                   <SplitText
                     text={service.description}
                     tag="p"
-                    className="text-lg text-gray-200 leading-relaxed split-text"
+                    className="text-lg text-gray-200 leading-relaxed split-text "
                     splitType="words"
                     delay={30}
                     threshold={0.2}
@@ -98,7 +89,9 @@ export default function Services() {
                 {/* Image */}
                 <div
                   className={`${
-                    service.reverse ? "md:order-1" : "md:order-2"
+                    service.reverse
+                      ? "md:order-1 order-1"  // desktop: left, mobile: top
+                      : "md:order-2 order-1"  // desktop: right, mobile: top
                   } relative w-full h-72 md:h-96`}
                 >
                   <Image

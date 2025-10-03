@@ -19,6 +19,9 @@
     "postprocessing": "^6.37.8",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-slick": "^0.31.0",
+    "slick-carousel": "^1.8.1",
+    "swiper": "^12.0.2",
     "three": "^0.180.0"
   },
   "devDependencies": {
