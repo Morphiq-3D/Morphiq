@@ -35,13 +35,13 @@ export default function HeroSection() {
         <h2 className="text-4xl font-bold mb-4 drop-shadow-lg">
           Custom 3D Designs
         </h2>
-        <p className="text-lg drop-shadow-md">
+        <p className="text-lg drop-shadow-md mb-6">
           Bring your imagination to life with our precision 3D printing
           solutions.
         </p>
-        <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow-lg transition transform hover:scale-105 mt-5">
+        <a className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow-lg transition transform hover:scale-105 mt-5">
           Upload your STL design
-        </button>
+        </a>
       </div>
 
           {/* Right side text with CTA */}
@@ -53,9 +53,9 @@ export default function HeroSection() {
           Durable materials, smooth finishes, and attention to detail in every
           design.
         </p>
-        <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow-lg transition transform hover:scale-105">
+        <a href="#request" className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow-lg transition transform hover:scale-105">
           Lets make magic 
-        </button>
+        </a>
       </div>
     </section>
   );

@@ -24,3 +24,15 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 } */
+
+.form-label {
+  @apply flex flex-col gap-2 font-medium;
+}
+
+.form-input {
+  @apply p-4 size-4 border border-[#ddd] rounded-lg w-full box-border;
+}
+
+html {
+  scroll-behavior: smooth;
+}
