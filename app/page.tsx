@@ -1,9 +1,14 @@
+"use client";
+import { useState } from "react";
 import HeroSection from "./components/HeroSection";
 import CustomDesign from "./components/CustomDesign";
 import Services from "./components/Services";
 import ProductCarousel from "./components/ProductCarousel";
+import StaggeredMenu from "./components/StaggeredMenu";
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const products = [
     { name: "Design 1", image: "/product1.jpg" },
     { name: "Design 2", image: "/product2.jpg" },
@@ -26,7 +31,12 @@ export default function Home() {
       
       <Services />
 
-      <CustomDesign />
+      <CustomDesign onOpenMenu={() => setIsMenuOpen(true)} />
+
+        <StaggeredMenu
+        isOpen={isMenuOpen}
+        setIsOpen={setIsMenuOpen}
+      />
     </>
   );
 }
