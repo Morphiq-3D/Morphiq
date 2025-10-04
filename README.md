@@ -22,8 +22,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Tasks ✅🔴
 ✅ add "3D design request" form
-🔴 import "3D design request" form styling 
-🔴 add "Printed Designs" section
+✅ add "3D design request" form
 
 
 ## Learn More

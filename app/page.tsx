@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
-import HeroSection from "./components/HeroSection";
+import Navbar from "./components/Navbar";
+import NewHeroSection from "./components/NewHeroSection";
 import CustomDesign from "./components/CustomDesign";
 import Services from "./components/Services";
 import ProductCarousel from "./components/ProductCarousel";
 import StaggeredMenu from "./components/StaggeredMenu";
+import Footer from "./components/Footer"
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,13 +27,16 @@ export default function Home() {
 
   return (
     <>
-      <HeroSection />
+      <Navbar />
+      <NewHeroSection />
 
       <ProductCarousel products={products} />
       
       <Services />
 
       <CustomDesign onOpenMenu={() => setIsMenuOpen(true)} />
+
+      <Footer />
 
         <StaggeredMenu
         isOpen={isMenuOpen}

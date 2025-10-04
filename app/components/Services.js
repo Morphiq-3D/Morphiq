@@ -29,12 +29,23 @@ export default function Services() {
   ];
 
   return (
-    <section className="py-20 bg-black">
-      <div className="container mx-auto px-4 space-y-16">
-        <h2 className="text-center text-4xl font-bold text-gray-100 mb-12">
+    <section className="pt-20 bg-black relative">
+
+    {/* Decoration sections */}
+    <div className="
+      decoration absolute right-[-30%] top-[-10%] md:top-[-20%] lg:top-[-30%] rounded-full aspect-square w-[500px] md:w-[1000px] lg:w-[1500px]
+      opacity-50 text-transparent blur-3xl bg-gradient-to-bl from-cyan-300 from-15% via-sky-950 via-60% to-black to-100%"></div>
+
+    <div className="
+      decoration absolute left-[-30%] bottom-[-10%] md:bottom-[-20%] lg:bottom-[-30%] rounded-full aspect-square w-[500px] md:w-[1000px] lg:w-[1500px]
+      opacity-50 text-transparent blur-3xl bg-gradient-to-br from-cyan-300 from-15% via-sky-950 via-60% to-black to-100%"></div>
+
+      <div className="container mx-auto px-4 space-y-16 overflow-hidden">
+        <h2 className="text-center text-4xl font-bold text-gray-100 mb-12 relative z-10">
           Our Services
         </h2>
 
+        {/* main content */}
         {services.map((service, index) => (
           <AnimatedContent
             key={index}
