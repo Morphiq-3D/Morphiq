@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+/* :root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+} */
+
+
+html, body {
+  scroll-behavior: smooth;
+  position: relative; /*! important for the navbar */
+  overflow-x: hidden;
+  background-color: black;
+}
+
+.btn {
+  @apply px-3 py-1 md:px-4 md:py-2 md:text-lg font-semibold rounded-xl shadow-md cursor-pointer;
+}
+
+.cta-btn-1 {
+  @apply bg-gradient-to-br from-blue-600 to-cyan-400 text-white hover:scale-110 duration-300 transition;
+}
+
+.cta-btn-2 {
+  @apply p-1 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-400 hover:scale-110 duration-300 transition;
+}
+
+/*
+* you cannot set a linear gradient directly as the `color` property
+* gradient text can be achieved using a combination of `background-image` and `background-clip`
+*/
+.gradient-text {
+  background-image: linear-gradient(131.461deg, #2563EB 0%, #00BBD4 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-label {
+  @apply flex flex-col gap-2 font-medium;
+}
+
+.form-input {
+  @apply p-4 size-4 border border-[#ddd] rounded-lg w-full box-border;
+}
