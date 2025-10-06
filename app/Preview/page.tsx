@@ -9,9 +9,9 @@ import { useFileContext } from "../context/FileContext";
 import { useRouter } from "next/navigation";
 
 const MATERIAL_PRICES: Record<string, number> = {
-  PLA: 3.0,
-  ABS: 6.0,
-  PETG: 5.0,
+  PLA: 0.15,
+  ABS: 0.15,
+  PETG: 0.15,
 };
 
 const MATERIAL_DENSITIES: Record<string, number> = {
