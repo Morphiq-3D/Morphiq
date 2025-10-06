@@ -2,11 +2,11 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import NewHeroSection from "./components/NewHeroSection";
-import CustomDesign from "./components/CustomDesign";
-import Services from "./components/Services";
 import ProductCarousel from "./components/ProductCarousel";
+import Services from "./components/Services";
+import CustomDesign from "./components/CustomDesign";
+import Footer from "./components/Footer";
 import StaggeredMenu from "./components/StaggeredMenu";
-import Footer from "./components/Footer"
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,19 +29,13 @@ export default function Home() {
     <>
       <Navbar />
       <NewHeroSection onOpenMenu={() => setIsMenuOpen(true)} />
-
       <ProductCarousel products={products} />
-      
       <Services />
-
       <CustomDesign onOpenMenu={() => setIsMenuOpen(true)} />
-
       <Footer />
 
-        <StaggeredMenu
-        isOpen={isMenuOpen}
-        setIsOpen={setIsMenuOpen}
-      />
+      {/* Staggered Menu */}
+      <StaggeredMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
     </>
   );
 }

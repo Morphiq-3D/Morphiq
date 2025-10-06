@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useFileContext } from "../context/FileContext";
 import { useState } from "react";
-import * as utils from "../test/utils/utils";
+import * as utils from "../Preview/utils/utils";
 
 export default function NewHeroSection({ onOpenMenu }) {
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function NewHeroSection({ onOpenMenu }) {
         }
 
         setFile(file);
-        router.push("/test");
+        router.push("/Preview");
       } catch (err) {
         console.error("STL validation error:", err);
         triggerNotification("Error reading the STL file. Please choose another file.");

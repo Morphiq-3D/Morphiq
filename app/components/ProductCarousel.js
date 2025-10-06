@@ -22,7 +22,7 @@ export default function ProductCarousel({ products }) {
 
           <Swiper
             modules={[Autoplay]}
-            slidesPerView={5} // desktop default
+            slidesPerView={3} // desktop default
             spaceBetween={20}
             loop={true}
             autoplay={{
@@ -30,10 +30,10 @@ export default function ProductCarousel({ products }) {
               disableOnInteraction: false,
             }}
             breakpoints={{
-              1280: { slidesPerView: 5, spaceBetween: 20 },
-              1024: { slidesPerView: 4, spaceBetween: 20 },
-              768: { slidesPerView: 3, spaceBetween: 16 },
-              640: { slidesPerView: 2, spaceBetween: 12 },
+              1280: { slidesPerView: 3, spaceBetween: 20 },
+              1024: { slidesPerView: 2, spaceBetween: 16 },
+              768: { slidesPerView: 2, spaceBetween: 12 },
+              640: { slidesPerView: 1, spaceBetween: 12 },
               0: {
                 slidesPerView: 1,
                 spaceBetween: 8,
@@ -43,7 +43,7 @@ export default function ProductCarousel({ products }) {
           >
             {products.map((product, index) => (
               <SwiperSlide key={index}>
-                <div className="relative h-90 max-w-[270px] w-[100%] mx-auto rounded-[40px] overflow-hidden shadow-lg">
+                <div className="relative h-110 max-w-[430px] w-[100%] mx-auto rounded-[40px] overflow-hidden shadow-lg">
                   <Image
                     src={product.image}
                     alt={product.name}

@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { CloudArrowUpIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import * as utils from "./utils/utils"; // adjust path if needed
+import * as utils from "./utils/utils"; 
 import { useFileContext } from "../context/FileContext";
 import { useRouter } from "next/navigation";
 
@@ -204,15 +204,15 @@ export default function TestPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 sm:p-8 lg:p-10">
+    <div className="min-h-screen bg-gray-900 p-6 sm:p-8 lg:p-10">
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 lg:gap-8">
 
         {/* LEFT COLUMN */}
         <div className="flex flex-col space-y-6">
 
           {/* 3D Viewer + File Details */}
-          <div className="bg-white rounded-2xl shadow-md p-4 lg:p-6 h-[85vh] overflow-hidden flex flex-col">
-            <div className="flex-1 rounded-lg bg-slate-100 flex items-center justify-center overflow-hidden">
+          <div className="bg-gray-800 rounded-2xl shadow-md p-4 lg:p-6 h-[85vh] overflow-hidden flex flex-col">
+            <div className="flex-1 rounded-lg bg-gray-700 flex items-center justify-center overflow-hidden">
               {selectedFileId ? (
                 <Canvas camera={{ position: [0, 0, 5], fov: 50 }} className="w-full h-full">
                   <ambientLight intensity={1.5} />
@@ -272,12 +272,12 @@ export default function TestPage() {
           </div>
 
           {/* CONTACT FORM */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
+          <div className="bg-gray-800 rounded-2xl shadow-md p-6">
             <h2 className="text-xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-br from-blue-600 to-cyan-400">
               Contact & Delivery
             </h2>
 
-            <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+            <form className="flex flex-col gap-3 text-white" onSubmit={handleSubmit}>
               <input
   type="email"
   name="email"
@@ -396,14 +396,14 @@ export default function TestPage() {
               <div className="flex gap-3 mt-3">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 rounded-lg font-semibold text-white bg-gradient-to-br from-blue-600 to-cyan-400 hover:opacity-85 duration-300 "
+                  className="flex-1 px-4 py-3 rounded-lg font-semibold text-white bg-gradient-to-br from-blue-600 to-cyan-400 hover:scale-96 duration-300 "
                 >
                   Submit Order
                 </button>
                 <button
                   type="button"
                   onClick={() => router.push("/")}
-                  className="flex-1 px-4 py-3 rounded-lg font-semibold text-white bg-gray-500 hover:bg-gray-600 duration-300"
+                  className="flex-1 px-4 py-3 rounded-lg font-semibold text-white bg-gray-500 hover:scale-96 duration-300"
                 >
                   Return to Home
                 </button>
@@ -415,7 +415,7 @@ export default function TestPage() {
         {/* RIGHT COLUMN */}
         <div className="space-y-6">
           {/* Upload Section */}
-          <div className="bg-white rounded-2xl shadow-md p-6 text-center">
+          <div className="bg-gray-800 rounded-2xl shadow-md p-6 text-center">
             <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-blue-600 to-cyan-400">
               STL File Customizer
             </h1>
@@ -443,13 +443,13 @@ export default function TestPage() {
 
           {/* Files List */}
           {uploadedFiles.length > 0 && (
-            <div className="bg-white rounded-2xl shadow-md p-6">
+            <div className="bg-gray-800 rounded-2xl shadow-md p-6 text-white">
               <h2 className="text-xl font-bold mb-4">Your Files</h2>
               <div className="flex flex-col gap-4">
                 {uploadedFiles.map((file) => (
                   <div
                     key={file.id}
-                    className={`flex items-center justify-between p-4 rounded-lg bg-white shadow-sm cursor-pointer border-2 ${
+                    className={`flex items-center justify-between p-4 rounded-lg bg-gray-700 shadow-sm cursor-pointer border-2 ${
                       selectedFileId === file.id ? "border-blue-400" : "border-transparent"
                     }`}
                     onClick={() => handleFileSelect(file.id)}
@@ -470,9 +470,9 @@ export default function TestPage() {
                 ))}
               </div>
 
-              <div className="mt-6 p-4 rounded-lg bg-white shadow-inner flex items-center justify-between font-bold text-lg">
-                <span>Grand Total Price:</span>
-                <span className="bg-clip-text text-transparent bg-gradient-to-br from-blue-600 to-cyan-400">
+              <div className="mt-6 p-4 rounded-lg bg-gray-700 shadow-inner flex items-center justify-between font-bold text-lg bg-gradient-to-br from-blue-600 to-cyan-400">
+                <span className="text-white">Grand Total Price:</span>
+                <span className="bg-clip-text text-white bg-gradient-to-br ">
                   {totalPrice.toFixed(2)}$
                 </span>
               </div>
