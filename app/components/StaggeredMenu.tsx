@@ -54,7 +54,6 @@ export default function StaggeredMenu({
     }
   }, [isOpen, position]);
 
-  // Handle form submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setNotification("Your request has been sent!");
@@ -62,30 +61,46 @@ export default function StaggeredMenu({
     setTimeout(() => setNotification(""), 3000);
   };
 
-  // Utility to attach refs to form fields for stagger animation
   const setFieldRef = (el: HTMLDivElement | null, index: number) => {
     formFieldsRef.current[index] = el;
   };
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen z-50 pointer-events-none">
+    <div
+      className={`fixed inset-0 z-[9999] ${
+        isOpen ? "pointer-events-auto" : "pointer-events-none"
+      }`}
+    >
+      {/* Optional backdrop for better UX */}
+      <div
+        className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${
+          isOpen ? "opacity-100" : "opacity-0"
+        }`}
+        onClick={() => setIsOpen(false)}
+      ></div>
+
+      {/* Sidebar Panel */}
       <aside
         ref={panelRef}
-        className={`absolute top-0 ${position}-0 h-full bg-gray-800 flex flex-col p-10 pointer-events-auto shadow-xl overflow-y-auto`}
+        className={`absolute top-0 ${position}-0 h-full bg-gray-800 flex flex-col p-10 shadow-2xl overflow-y-auto`}
         style={{ width: "clamp(260px, 38vw, 420px)" }}
       >
-        {/* Close button */}
+        {/* Close Button */}
         <div ref={(el) => setFieldRef(el, 0)} className="mb-6">
           <button
             onClick={() => setIsOpen(false)}
-            className="px-4 py-2 bg-gradient-to-br from-blue-600 to-cyan-400 text-white rounded"
+            className="px-4 py-2 bg-gradient-to-br from-blue-600 to-cyan-400 text-white rounded font-semibold hover:scale-105 transition-transform duration-200"
           >
             Close
           </button>
         </div>
 
         {/* Form */}
-        <form ref={formRef} className="flex flex-col gap-4 text-white" onSubmit={handleSubmit}>
+        <form
+          ref={formRef}
+          className="flex flex-col gap-4 text-white"
+          onSubmit={handleSubmit}
+        >
           <div ref={(el) => setFieldRef(el, 1)}>
             <input
               type="text"
@@ -134,9 +149,11 @@ export default function StaggeredMenu({
           </div>
         </form>
 
-        {/* Notification */}
         {notification && (
-          <div ref={(el) => setFieldRef(el, 7)} className="mt-4 p-3 bg-green-500 text-white rounded shadow">
+          <div
+            ref={(el) => setFieldRef(el, 7)}
+            className="mt-4 p-3 bg-green-500 text-white rounded shadow"
+          >
             {notification}
           </div>
         )}

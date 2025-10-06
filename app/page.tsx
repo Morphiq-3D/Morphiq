@@ -17,10 +17,10 @@ export default function Home() {
     { name: "Design 3", image: "/product3.jpg" },
     { name: "Design 4", image: "/product4.jpg" },
     { name: "Design 5", image: "/product5.jpg" },
-    { name: "Design 6", image: "/product3.jpg" },
-    { name: "Design 7", image: "/product4.jpg" },
-    { name: "Design 8", image: "/product5.jpg" },
-    { name: "Design 9", image: "/product3.jpg" },
+    { name: "Design 6", image: "/product6.jpg" },
+    { name: "Design 7", image: "/product7.jpg" },
+    { name: "Design 8", image: "/product8.jpg" },
+    { name: "Design 9", image: "/product9.jpg" },
     { name: "Design 10", image: "/product4.jpg" },
     { name: "Design 11", image: "/product5.jpg" },
   ];
@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <NewHeroSection />
+      <NewHeroSection onOpenMenu={() => setIsMenuOpen(true)} />
 
       <ProductCarousel products={products} />
       

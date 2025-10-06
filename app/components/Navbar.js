@@ -51,9 +51,9 @@ export default function Navbar() {
                 </div>
             </div>
             <div className="nav flex gap-3 md:gap-5 lg:text-lg">
-                <Link href="#">About</Link>
-                <Link href="#">FAQ</Link>
-                <Link href="#">Services</Link>
+                <Link href="#" className="hover:text-gray-400 duration-300">About</Link>
+                <Link href="#" className="hover:text-gray-400 duration-300">FAQ</Link>
+                <Link href="#" className="hover:text-gray-400 duration-300">Services</Link>
             </div>
         </div>
     );
