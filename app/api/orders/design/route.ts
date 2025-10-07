@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
             orderData.userId = userResult[0].id;
         } else {
             const createdUser: User[] = await db?.insert(users).values(userData).returning();
-            if (createdUser) orderData.userId = createdUser[0].id;
+            if (createdUser) {orderData.userId = createdUser[0].id};
         }
 
         const insertionResult = await db?.insert(orders).values(orderData);
@@ -46,6 +46,6 @@ export async function POST(req: NextRequest) {
         }
     } catch (e: unknown) {
         console.error(e);
-        return NextResponse.json({ message: "error" }, { status: 500 });
+        return NextResponse.json({ error: e }, { status: 500 });
     }
 }

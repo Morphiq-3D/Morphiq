@@ -76,6 +76,7 @@ export default function StaggeredMenu({
       });
 
       if (!response.ok) {
+        console.error(response.body);
         throw new Error(`HTTP Error! status: ${response.status}`);
       }
 
