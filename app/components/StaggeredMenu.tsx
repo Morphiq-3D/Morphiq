@@ -2,6 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
+// TODO: change animation on mobile view to "down sheet"
+// TODO: maybe add a loading animation when sending the request ??
+
 interface StaggeredMenuProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
@@ -19,6 +22,7 @@ export default function StaggeredMenu({
   const formRef = useRef<HTMLFormElement>(null);
   const formFieldsRef = useRef<Array<HTMLDivElement | null>>([]);
   const [notification, setNotification] = useState("");
+  const [error, setError] = useState("");
 
   // Initial hidden state
   useEffect(() => {
@@ -54,12 +58,49 @@ export default function StaggeredMenu({
     }
   }, [isOpen, position]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setNotification("Your request has been sent!");
-    formRef.current?.reset();
-    setTimeout(() => setNotification(""), 3000);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const formJson = Object.fromEntries(formData.entries());
+    console.log("json: ", formJson);
+
+    try {
+      const response = await fetch("/api/orders/design", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formJson),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! status: ${response.status}`);
+      }
+
+      console.log("Your request has been sent!");
+      setError("");
+      setNotification("Your request has been sent!");
+      formRef.current?.reset();
+      setTimeout(() => setNotification(""), 3000);
+
+    } catch (e: unknown) {
+      console.error(e);
+      setNotification("");
+      setError("Error sending your request!")
+    }
   };
+
+  const handleClose = () => {
+    setIsOpen(false);
+
+    setTimeout(() => {
+      formRef.current?.reset();
+      setNotification("");
+      setError("");
+    }, 3000);
+  }
 
   const setFieldRef = (el: HTMLDivElement | null, index: number) => {
     formFieldsRef.current[index] = el;
@@ -67,15 +108,13 @@ export default function StaggeredMenu({
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] ${
-        isOpen ? "pointer-events-auto" : "pointer-events-none"
-      }`}
+      className={`fixed inset-0 z-[9999] ${isOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
     >
       {/* Optional backdrop for better UX */}
       <div
-        className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${
-          isOpen ? "opacity-100" : "opacity-0"
-        }`}
+        className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0"
+          }`}
         onClick={() => setIsOpen(false)}
       ></div>
 
@@ -88,7 +127,7 @@ export default function StaggeredMenu({
         {/* Close Button */}
         <div ref={(el) => setFieldRef(el, 0)} className="mb-6">
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
             className="px-4 py-2 bg-gradient-to-br from-blue-600 to-cyan-400 text-white rounded font-semibold hover:scale-105 transition-transform duration-200"
           >
             Close
@@ -104,36 +143,47 @@ export default function StaggeredMenu({
           <div ref={(el) => setFieldRef(el, 1)}>
             <input
               type="text"
-              placeholder="Full Name"
+              name="fname"
+              placeholder="First Name"
               required
               className="border border-gray-400 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
           <div ref={(el) => setFieldRef(el, 2)}>
             <input
+              type="text"
+              name="lname"
+              placeholder="Last Name"
+              required
+              className="border border-gray-400 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div ref={(el) => setFieldRef(el, 3)}>
+            <input
               type="email"
+              name="email"
               placeholder="Email"
               required
               className="border border-gray-400 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div ref={(el) => setFieldRef(el, 3)}>
-            <input
-              type="tel"
-              placeholder="Phone Number (Optional)"
-              className="border border-gray-400 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+
           <div ref={(el) => setFieldRef(el, 4)}>
             <input
               type="tel"
-              placeholder="Whatsapp Number (Optional)"
+              name="phone"
+              placeholder="Phone Number"
+              required
               className="border border-gray-400 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
           <div ref={(el) => setFieldRef(el, 5)}>
             <textarea
               placeholder="Describe your 3D model"
+              name="description"
               required
               rows={5}
               className="border border-gray-400 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
@@ -155,6 +205,15 @@ export default function StaggeredMenu({
             className="mt-4 p-3 bg-green-500 text-white rounded shadow"
           >
             {notification}
+          </div>
+        )}
+
+        {error && (
+          <div
+            ref={(el) => setFieldRef(el, 7)}
+            className="mt-4 p-3 bg-red-500 text-white rounded shadow"
+          >
+            {error}
           </div>
         )}
       </aside>

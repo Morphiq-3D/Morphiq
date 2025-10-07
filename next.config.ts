@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 
+// TODO: un-ignore build errors and solve them and do a test build
 const nextConfig: NextConfig = {
   // This will temporarily bypass TypeScript errors during the build.
   // The build will pass even with type errors in your code.

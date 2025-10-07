@@ -1,0 +1,44 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+// install "vscode-dbml" vscode extension by "Matt Meyers"
+// install "better comments" vscode extension by "Aaron Bond"
+
+// settling for integer ids instead of uuids for storage constraints
+Table Users {
+    id int [primary key]
+    fname varchar(255) [not null]
+    lname varchar(255) [not null]
+    email varchar(255) [not null]
+    phone varchar(255) [not null]
+    password varchar(255) // nullable for now
+    created_at datetime
+    updated_at datetime
+}
+
+//* uses jsonb (binary json) for storage efficiency and fast retrievals
+//* will not be using ENUM for order type, will be validating in backend, decrease the possibility of failing requests (network transfers) and improving maintainability
+Table Orders {
+    id int [primary key]
+    user_id int [ref: > Users.id, not null]
+    type varchar(50)
+    cart jsonb
+    price_cents int
+    notes varchar(500)
+    created_at datetime
+    updated_at datetime
+}
+
+// this design allows multiple addresses per user
+Table Address {
+    id int [primary key]
+    user_id int [ref: > Users.id, not null]
+    country varchar(255)
+    governorate varchar(255)
+    postal_code int // TODO: double check
+    street varchar(255)
+    building_name varchar(255)
+    floor int
+    apartment int
+    created_at datetime
+    updated_at datetime
+}

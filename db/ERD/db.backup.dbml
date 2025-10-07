@@ -1,0 +1,91 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+// install "vscode-dbml" vscode extension by "Matt Meyers"
+
+// datetime VS timestamp in MongoDB
+// in case of using mysql, use version > 8.0 for timezone support in datetime
+
+Table Users {
+    id int [primary key]
+    first_name varchar(255) [not null]
+    middle_name varchar(255)
+    last_name varchar(255) [not null]
+    email varchar(255) [not null]
+    password varchar(255) // nullable
+    created_at datetime
+    updated_at datetime
+}
+
+// register multiple phone numbers for a single user
+Table Phone_Numbers {
+    user_id int [ref: > Users.id, not null]
+    number varchar(255)
+    // phone data
+    created_at datetime
+    updated_at datetime
+}
+
+// a product is based on a design or multiple designs
+// a design may be used in multiple products
+Table Products {
+    id int [primary key]
+    design_id int [ref: <> Design.id]
+    name varchar(255)
+    description text
+    price_cents int [not null]
+    created_at datetime
+    updated_at datetime
+}
+
+/*
+* always associate a design with a user
+* if the design is a product, then associate it with the admin
+* because a product is of course created by the admin
+*/
+Table Design {
+    id int [primary key]
+    user_id int [ref: > Users.id, not null]
+
+    /* Design Meta Data */
+    link varchar(255)
+    description text
+    volume Decimal // limit to 2 decimal places
+
+    created_at datetime
+    updated_at datetime
+}
+
+Table Orders {
+    id int [primary key]
+    user_id int [ref: > Users.id, not null]
+    items json
+    notes text
+    price_cents int
+
+    created_at datetime
+    updated_at datetime
+}
+
+Table order_item {
+    id int [primary key]
+    design_id int [ref: > Design.id, not null]
+    quantity int
+    material varchar(255)
+    unit_price_cents int
+    total_price_cents int
+}
+
+// this design allows multiple addresses per user
+Table Address {
+    id int [primary key]
+    user_id int [ref: > Users.id, not null]
+    country varchar(255)
+    governrate varchar(255)
+    postal_code int // TODO: double check
+    street varchar(255)
+    building_num int
+    floor int
+    appartment int
+    created_at datetime
+    updated_at datetime
+}
