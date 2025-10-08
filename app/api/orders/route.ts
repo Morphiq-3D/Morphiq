@@ -1,11 +1,9 @@
-import { getDb } from "@/db";
-import { orders } from "@/db/schema";
+import { getOrders } from "@/services/orders.service";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const db = getDb();
-        const data =  await db?.select().from(orders);
+        const data = await getOrders();
     
         return NextResponse.json({result: data}, { status: 200 })
 
@@ -13,3 +11,5 @@ export async function GET() {
         return NextResponse.json({ error: e}, { status: 500 });
     }
 }
+
+// TODO: implement get order by id functionality (function will not be here)

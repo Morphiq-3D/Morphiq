@@ -2,6 +2,7 @@ import { pgTable } from "drizzle-orm/pg-core";
 import { serial, varchar, integer, jsonb, timestamp } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
+// TODO: add updatedAt and deletedAt timestamps
 const timestamps = {
     createdAt: timestamp("created_at").defaultNow().notNull()
 }

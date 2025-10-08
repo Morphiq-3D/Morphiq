@@ -141,7 +141,18 @@ export default function StaggeredMenu({
           className="flex flex-col gap-4 text-white"
           onSubmit={handleSubmit}
         >
+          {/* TODO: implement field filling with existing emails */}
           <div ref={(el) => setFieldRef(el, 1)}>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              required
+              className="border border-gray-400 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div ref={(el) => setFieldRef(el, 2)}>
             <input
               type="text"
               name="fname"
@@ -151,21 +162,11 @@ export default function StaggeredMenu({
             />
           </div>
 
-          <div ref={(el) => setFieldRef(el, 2)}>
+          <div ref={(el) => setFieldRef(el, 3)}>
             <input
               type="text"
               name="lname"
               placeholder="Last Name"
-              required
-              className="border border-gray-400 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div ref={(el) => setFieldRef(el, 3)}>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
               required
               className="border border-gray-400 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

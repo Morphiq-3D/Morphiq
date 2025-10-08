@@ -5,7 +5,7 @@ import * as schema from "./schema"
 
 let db: ReturnType<typeof drizzle> | null = null;
 
-export function getDb() {
+export function getDB() {
     if (!db) {
         const sql = neon(process.env.DATABASE_URL!);
         db = drizzle(sql, {

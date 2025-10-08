@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { CloudArrowUpIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import * as utils from "./utils/utils"; 
+import * as utils from "./utils/utils";
 import { useFileContext } from "../context/FileContext";
 import { useRouter } from "next/navigation";
 
@@ -77,10 +77,10 @@ export default function TestPage() {
     firstName: "",
     lastName: "",
     country: "",
-    governate: "",
+    governorate: "",
     district: "",
     street: "",
-    buildingNum: "",
+    building: "",
     floor: "",
     apartment: "",
     phone: "",
@@ -196,11 +196,53 @@ export default function TestPage() {
 
   const handleFileSelect = (id: string) => setSelectedFileId(id);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const orderData = { contact: formData, files: uploadedFiles, grandTotal: totalPrice };
-    console.log("Submitting order:", orderData);
-    alert("Order submitted! See console for details.");
+
+    try {
+      const requestBody = {
+        "user": {
+          "fname": formData.firstName,
+          "lname": formData.lastName,
+          "email": formData.email,
+          "phone": formData.phone
+        },
+        "address": {
+          "country": formData.governorate,
+          "governorate": formData.governorate,
+          "postalCode": "12345", // TODO: handle postal code input
+          "street": formData.street,
+          "building": formData.building,
+          "floor": formData.floor,
+          "apartment": formData.apartment,
+        },
+        "cart": {
+          "products": [ /* { "id": "1234", "quantity": 2, "material": "ABS" }, */], // TODO: handle products ordering
+          "designs": uploadedFiles
+        },
+        "priceCents": Math.ceil(totalPrice * 100),
+        "description": "Hello World" // TODO: handle notes input
+      };
+
+      console.log("submitting order: ", requestBody);
+
+      const response = await fetch("/api/orders/print", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.ok) {
+        alert("✅ Order placed successfully!");
+        setUploadedFiles([]); // clear uploaded files array
+        // TODO: reset form
+      } else {
+        alert("❌ Failed to place order.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("⚠️ Something went wrong.");
+    }
   };
 
   return (
@@ -279,117 +321,117 @@ export default function TestPage() {
 
             <form className="flex flex-col gap-3 text-white" onSubmit={handleSubmit}>
               <input
-  type="email"
-  name="email"
-  placeholder="Email"
-  value={formData.email}
-  onChange={handleChange}
-  required
-  className="p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-/>
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
 
-<div className="flex flex-wrap gap-3">
-  <input
-    type="text"
-    name="firstName"
-    placeholder="First Name"
-    value={formData.firstName}
-    onChange={handleChange}
-    required
-    className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
-  <input
-    type="text"
-    name="lastName"
-    placeholder="Last Name"
-    value={formData.lastName}
-    onChange={handleChange}
-    required
-    className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
-</div>
+              <div className="flex flex-wrap gap-3">
+                <input
+                  type="text"
+                  name="firstName"
+                  placeholder="First Name"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
 
-<div className="flex flex-wrap gap-3">
-  <input
-    type="text"
-    name="country"
-    placeholder="Country"
-    value={formData.country}
-    onChange={handleChange}
-    required
-    className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
-  <input
-    type="text"
-    name="governate"
-    placeholder="Governate"
-    value={formData.governate}
-    onChange={handleChange}
-    required
-    className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
-</div>
+              <div className="flex flex-wrap gap-3">
+                <input
+                  type="text"
+                  name="country"
+                  placeholder="Country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <input
+                  type="text"
+                  name="governorate"
+                  placeholder="Governorate"
+                  value={formData.governorate}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
 
-<div className="flex flex-wrap gap-3">
-  <input
-    type="text"
-    name="district"
-    placeholder="District"
-    value={formData.district}
-    onChange={handleChange}
-    required
-    className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
-  <input
-    type="text"
-    name="street"
-    placeholder="Street"
-    value={formData.street}
-    onChange={handleChange}
-    required
-    className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
-</div>
+              <div className="flex flex-wrap gap-3">
+                <input
+                  type="text"
+                  name="district"
+                  placeholder="District"
+                  value={formData.district}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <input
+                  type="text"
+                  name="street"
+                  placeholder="Street"
+                  value={formData.street}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
 
-<div className="flex flex-wrap gap-3">
-  <input
-    type="text"
-    name="buildingNum"
-    placeholder="Building Number"
-    value={formData.buildingNum}
-    onChange={handleChange}
-    required
-    className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
-  <input
-    type="text"
-    name="floor"
-    placeholder="Floor"
-    value={formData.floor}
-    onChange={handleChange}
-    required
-    className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
-  <input
-    type="text"
-    name="apartment"
-    placeholder="Apartment"
-    value={formData.apartment}
-    onChange={handleChange}
-    required
-    className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
-</div>
+              <div className="flex flex-wrap gap-3">
+                <input
+                  type="text"
+                  name="building"
+                  placeholder="Building Name/Number"
+                  value={formData.building}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <input
+                  type="text"
+                  name="floor"
+                  placeholder="Floor"
+                  value={formData.floor}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <input
+                  type="text"
+                  name="apartment"
+                  placeholder="Apartment"
+                  value={formData.apartment}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
 
-<input
-  type="tel"
-  name="phone"
-  placeholder="Phone"
-  value={formData.phone}
-  onChange={handleChange}
-  required
-  className="p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-/>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                className="p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
 
 
               {/* Submit + Return Home */}
@@ -449,9 +491,8 @@ export default function TestPage() {
                 {uploadedFiles.map((file) => (
                   <div
                     key={file.id}
-                    className={`flex items-center justify-between p-4 rounded-lg bg-gray-700 shadow-sm cursor-pointer border-2 ${
-                      selectedFileId === file.id ? "border-blue-400" : "border-transparent"
-                    }`}
+                    className={`flex items-center justify-between p-4 rounded-lg bg-gray-700 shadow-sm cursor-pointer border-2 ${selectedFileId === file.id ? "border-blue-400" : "border-transparent"
+                      }`}
                     onClick={() => handleFileSelect(file.id)}
                   >
                     <div className="flex-1 min-w-0">
