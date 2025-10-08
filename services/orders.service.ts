@@ -1,7 +1,7 @@
 import { getDB } from "@/db";
 import { orders } from "@/db/schema";
 import { NewOrder } from "@/db/types";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 const db = getDB();
 
@@ -22,9 +22,10 @@ export async function createOrder(data: NewOrder) {
 }
 
 export async function updateOrder(id: number, data: NewOrder) {
-    return await db?.update(orders).set(data).where(eq(orders.id, id));
+    return await db?.update(orders).set({...data, updatedAt: sql`now()`}).where(eq(orders.id, id));
 }
 
 export async function deleteOrder(id: number) {
+    // TODO: delete files from cloud storage
     return await db?.delete(orders).where(eq(orders.id, id));
 }

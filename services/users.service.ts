@@ -1,7 +1,7 @@
 import { getDB } from "@/db";
 import { users } from "@/db/schema"
 import { NewUser } from "@/db/types";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 const db = getDB();
 
@@ -22,7 +22,7 @@ export async function createUser(data: NewUser) {
 }
 
 export async function updateUser(id: number, data: NewUser) {
-    return await db?.update(users).set(data).where(eq(users.id, id));
+    return await db?.update(users).set({...data, updatedAt: sql`now()`}).where(eq(users.id, id));
 }
 
 export async function deleteUser(id: number) {

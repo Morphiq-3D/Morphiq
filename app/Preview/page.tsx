@@ -1,10 +1,12 @@
 "use client";
 
+import type { BufferGeometry } from "three";
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { CloudArrowUpIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import * as utils from "./utils/utils";
+import type { UploadedFile } from "./utils/utils";
 import { useFileContext } from "../context/FileContext";
 import { useRouter } from "next/navigation";
 
@@ -20,32 +22,20 @@ const MATERIAL_DENSITIES: Record<string, number> = {
   PETG: 1.27,
 };
 
-type UploadedFile = {
-  id: string;
-  file: File;
-  name: string;
-  volume: number;
-  material: string;
-  weight: number;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-};
-
 function Model({ file, col = "gray" }: { file?: File | null; col?: string }) {
-  const [geometry, setGeometry] = useState<any | null>(null);
+  const [geometry, setGeometry] = useState<BufferGeometry | null>(null);
 
   useEffect(() => {
     if (!file) return;
     let mounted = true;
 
     utils.getGeometry(file)
-      .then((geo: any) => {
+      .then((geo: BufferGeometry) => {
         if (!mounted) return;
         geo.center();
         setGeometry(geo);
       })
-      .catch((err: any) => console.error("getGeometry error:", err));
+      .catch((err: unknown) => console.error("getGeometry error:", err));
 
     return () => { mounted = false; };
   }, [file]);
@@ -160,6 +150,8 @@ export default function TestPage() {
       quantity,
       unitPrice,
       totalPrice,
+      url: "",
+      folder: ""
     };
   };
 
@@ -200,6 +192,20 @@ export default function TestPage() {
     e.preventDefault();
 
     try {
+      // upload files to storage service
+      const uploadMetaData: object[] = await utils.uploadFiles(uploadedFiles);
+
+      if (uploadMetaData.length !== uploadedFiles.length) throw new Error("uploading files to storage service failed");
+
+      // merge uploadMetaData with uploadedFiles
+      const mergedUploadedFiles = uploadedFiles.map((obj, idx) => {
+        const { file, ...rest } = obj
+        return {
+          ...rest,
+          ...uploadMetaData[idx],
+        }
+      });
+
       const requestBody = {
         "user": {
           "fname": formData.firstName,
@@ -218,7 +224,7 @@ export default function TestPage() {
         },
         "cart": {
           "products": [ /* { "id": "1234", "quantity": 2, "material": "ABS" }, */], // TODO: handle products ordering
-          "designs": uploadedFiles
+          "designs": mergedUploadedFiles
         },
         "priceCents": Math.ceil(totalPrice * 100),
         "description": "Hello World" // TODO: handle notes input
@@ -404,7 +410,7 @@ export default function TestPage() {
                   className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <input
-                  type="text"
+                  type="number"
                   name="floor"
                   placeholder="Floor"
                   value={formData.floor}
@@ -413,7 +419,7 @@ export default function TestPage() {
                   className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <input
-                  type="text"
+                  type="number"
                   name="apartment"
                   placeholder="Apartment"
                   value={formData.apartment}

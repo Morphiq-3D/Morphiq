@@ -7,7 +7,6 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
@@ -19,10 +18,12 @@
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.3.0",
     "@react-three/postprocessing": "^3.0.4",
+    "cloudinary": "^2.7.0",
     "drizzle-orm": "^0.44.6",
     "gsap": "^3.13.0",
     "motion": "^12.23.22",
     "next": "15.5.4",
+    "node-mailjet": "^6.0.9",
     "postprocessing": "^6.37.8",
     "react": "19.1.0",
     "react-dom": "19.1.0",

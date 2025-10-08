@@ -2,9 +2,9 @@ import { pgTable } from "drizzle-orm/pg-core";
 import { serial, varchar, integer, jsonb, timestamp } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-// TODO: add updatedAt and deletedAt timestamps
 const timestamps = {
-    createdAt: timestamp("created_at").defaultNow().notNull()
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
 }
 
 // settling for integer ids instead of uuids for storage constraints
@@ -42,8 +42,8 @@ export const addresses = pgTable("addresses", {
     postalCode: varchar("postal_code", {length: 50 }),
     street: varchar({length: 255}),
     building: varchar({length: 255}),
-    floor: integer(),
-    apartment: integer(),
+    floor: varchar({ length: 255 }),
+    apartment: varchar({ length: 255 }),
     ...timestamps
 });
 

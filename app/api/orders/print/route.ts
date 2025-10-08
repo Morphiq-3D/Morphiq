@@ -3,6 +3,7 @@ import { createUser, getUserByEmail } from "@/services/users.service";
 import { createOrder } from "@/services/orders.service";
 import { NextRequest, NextResponse } from "next/server";
 import { createAddress, updateUserAddress } from "@/services/addresses.service";
+import { sendPrintOrderConfirmationEmail, sendWelcomeEmail } from "@/services/mail.service";
 
 export async function POST(req: NextRequest) {
     try {
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest) {
             const createdAddress: Address[] = await createAddress({userId: createdUser[0].id, ...address});
 
             console.log(`user with email ${email} does not exist, created a new user account`);
+            sendWelcomeEmail(email);
         } else {
             orderData.userId = searchResult[0].id;
 
@@ -43,6 +45,7 @@ export async function POST(req: NextRequest) {
         }
 
         console.log("order created successfully");
+        sendPrintOrderConfirmationEmail(email);
         return NextResponse.json({ message: "order created successfully" }, { status: 201 });
 
 

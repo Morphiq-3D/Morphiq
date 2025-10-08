@@ -1,7 +1,7 @@
 import { getDB } from "@/db";
 import { addresses } from "@/db/schema"
 import { NewAddress } from "@/db/types";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 const db = getDB();
 
@@ -22,11 +22,11 @@ export async function createAddress(data: NewAddress) {
 }
 
 export async function updateAddress(id: number, data: NewAddress) {
-    return await db?.update(addresses).set(data).where(eq(addresses.id, id));
+    return await db?.update(addresses).set({...data, updatedAt: sql`now()`}).where(eq(addresses.id, id));
 }
 
 export async function updateUserAddress(userId: number, data: NewAddress) {
-    return await db?.update(addresses).set(data).where(eq(addresses.userId, userId));
+    return await db?.update(addresses).set({...data, updatedAt: sql`now()`}).where(eq(addresses.userId, userId));
 }
 
 export async function deleteAddress(id: number) {

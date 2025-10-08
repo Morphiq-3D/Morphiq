@@ -2,6 +2,28 @@
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 
+export type UploadedFile = {
+  id: string,
+  file: File,
+  url: string,
+  folder: string,
+  name: string,
+  volume: number,
+  material: string,
+  weight: number,
+  quantity: number,
+  unitPrice: number,
+  totalPrice: number,
+};
+
+type SignatureData = {
+  folder: string,
+  signature: string,
+  timestamp: number,
+  cloud_name: string,
+  api_key: string
+}
+
 // ✅ Validate STL file format
 export function validateSTL(file: File): Promise<boolean> {
   return new Promise((resolve) => {
@@ -132,29 +154,29 @@ export async function computeMeshVolume(file: File): Promise<number> {
 }
 
 // ✅ Upload helpers
-export async function uploadFiles(files: File[]): Promise<string[]> {
-  const newUrls: string[] = [];
+export async function uploadFiles(files: UploadedFile[]): Promise<object[]> {
+  const uploadMetaData: object[] = [];
   const sigResponse = await getUploadSignature();
-  if (!sigResponse) return newUrls;
+  if (!sigResponse) return uploadMetaData;
 
   for (const file of files) {
     try {
-      const response = await uploadFileToCloudinary(file, sigResponse);
-      if (response.secure_url) {
-        newUrls.push(response.secure_url);
+      const response = await uploadFileToCloudinary(file.file, sigResponse);
+
+      if (response.secure_url && sigResponse.folder) {
+        uploadMetaData.push({ url: response.secure_url, folder: sigResponse.folder });
+      } else {
+        throw new Error("Error uploading file: secure_url or storage folder wasn't provided");
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error uploading file:", error);
     }
   }
 
-  return newUrls;
+  return uploadMetaData;
 }
 
-async function uploadFileToCloudinary(
-  file: File,
-  signatureData: any
-): Promise<any> {
+async function uploadFileToCloudinary(file: File, signatureData: SignatureData): Promise<Record<string, string>> {
   const { folder, signature, timestamp, cloud_name, api_key } = signatureData;
   const url = `https://api.cloudinary.com/v1_1/${cloud_name}/upload`;
 
@@ -167,10 +189,11 @@ async function uploadFileToCloudinary(
 
   const res = await fetch(url, { method: "POST", body: formData });
   const data = await res.json();
+  console.log("file upload result: ", data);
   return data;
 }
 
-async function getUploadSignature() {
+async function getUploadSignature(): Promise<SignatureData|null>  {
   try {
     const response = await fetch(`/api/upload/signature`, {
       method: "POST",
@@ -178,7 +201,7 @@ async function getUploadSignature() {
     });
     if (!response.ok) throw new Error("Failed to get upload signature");
     return await response.json();
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Failed to get upload signature:", error);
     return null;
   }
