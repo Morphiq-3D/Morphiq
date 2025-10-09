@@ -214,7 +214,7 @@ export default function TestPage() {
           "phone": formData.phone
         },
         "address": {
-          "country": formData.governorate,
+          "country": formData.country,
           "governorate": formData.governorate,
           "postalCode": "12345", // TODO: handle postal code input
           "street": formData.street,
@@ -222,12 +222,16 @@ export default function TestPage() {
           "floor": formData.floor,
           "apartment": formData.apartment,
         },
-        "cart": {
-          "products": [ /* { "id": "1234", "quantity": 2, "material": "ABS" }, */], // TODO: handle products ordering
-          "designs": mergedUploadedFiles
-        },
-        "priceCents": Math.ceil(totalPrice * 100),
-        "description": "Hello World" // TODO: handle notes input
+        "order": {
+          "cart": {
+            "products": [ /* { "id": "1234", "quantity": 2, "material": "ABS" }, */], // TODO: handle products ordering
+            "designs": mergedUploadedFiles
+          },
+          "type": "print",
+          "userId": 0,
+          "priceCents": Math.ceil(totalPrice * 100),
+          "description": "Hello World" // TODO: handle notes input
+        }
       };
 
       console.log("submitting order: ", requestBody);
@@ -410,7 +414,7 @@ export default function TestPage() {
                   className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <input
-                  type="number"
+                  type="text"
                   name="floor"
                   placeholder="Floor"
                   value={formData.floor}
@@ -419,7 +423,7 @@ export default function TestPage() {
                   className="flex-1 min-w-0 p-3 rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <input
-                  type="number"
+                  type="text"
                   name="apartment"
                   placeholder="Apartment"
                   value={formData.apartment}

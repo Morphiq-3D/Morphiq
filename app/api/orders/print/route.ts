@@ -1,56 +1,88 @@
-import { Address, NewOrder, User } from "@/db/types";
+import { User } from "@/db/types";
 import { createUser, getUserByEmail } from "@/services/users.service";
 import { createOrder } from "@/services/orders.service";
 import { NextRequest, NextResponse } from "next/server";
-import { createAddress, updateUserAddress } from "@/services/addresses.service";
+import { createAddress, getAddressByUserId, updateUserAddress } from "@/services/addresses.service";
 import { sendPrintOrderConfirmationEmail, sendWelcomeEmail } from "@/services/mail.service";
+import { userInsertSchema } from "@/validation/users.schema";
+import { orderInsertSchema } from "@/validation/orders.schema";
+import { addressInsertSchema } from "@/validation/addresses.schema";
+import { z, ZodError } from "zod";
+
+const requestSchema = z.object({
+    user: userInsertSchema,
+    order: orderInsertSchema,
+    address: addressInsertSchema
+})
 
 export async function POST(req: NextRequest) {
     try {
-        // TODO: add validation layer
+        // {user, order, address }
+        const body = await req.json();
+        // console.log("request body", body);
 
-        const { user, address, cart, priceCents, description } = await req.json();
+        const parsed = requestSchema.parse(body);
 
-        const orderData: NewOrder = { userId: 0, type: "print", cart, priceCents, description };
+        const { user, order, address } = parsed;
 
-        const { fname, lname, email, phone } = user;
+        order.userId = 0; order.type = "print";
 
         // check whether user exists or not using email
-        const searchResult: User[] = await getUserByEmail(email);
+        const searchResult: User[] = await getUserByEmail(user.email);
         console.log("search result: ", searchResult);
 
         if (searchResult.length === 0) {
             // user with this email does not exist, create new user
-            const createdUser: User[] = await createUser({ fname, lname, email, phone });
-            orderData.userId = createdUser[0].id;
+            const createdUser: User[] = await createUser(user);
+            order.userId = createdUser[0].id;
             
             // create user's address
-            const createdAddress: Address[] = await createAddress({userId: createdUser[0].id, ...address});
+            await createAddress({userId: createdUser[0].id, ...address});
 
-            console.log(`user with email ${email} does not exist, created a new user account`);
-            sendWelcomeEmail(email);
+            console.log(`user with email ${user.email} does not exist, created a new user account`);
+            sendWelcomeEmail(user.email);
         } else {
-            orderData.userId = searchResult[0].id;
+            order.userId = searchResult[0].id;
 
-            // update user's address
-            await updateUserAddress(searchResult[0].id, address);
+            // check whether the user has an address or not
+            const userAddress = await getAddressByUserId(searchResult[0].id);
             
-            console.log(`user with email ${email} exists, order added to there account`);
+            if (userAddress.length === 0) {
+                // create a new address
+                await createAddress({ ...address, userId: searchResult[0].id });
+            } else {
+                // update the existing address
+                await updateUserAddress(searchResult[0].id, address);
+            }
+            
+            console.log(`user with email ${user.email} exists, order added to there account`);
         }
 
-        const createdOrder = createOrder(orderData);
+        const createdOrder = createOrder(order);
         if (!createdOrder) {
             console.error("order creation may have failed");
             return NextResponse.json({ message: "order creation may have failed" }, { status: 500 });
         }
 
         console.log("order created successfully");
-        sendPrintOrderConfirmationEmail(email);
+        sendPrintOrderConfirmationEmail(user.email);
         return NextResponse.json({ message: "order created successfully" }, { status: 201 });
 
 
-    } catch (e: unknown) {
-        console.error(e);
-        return NextResponse.json({ error: e }, { status: 500 });
+    } catch (error) {
+        if (error instanceof ZodError) {
+
+            const errors = error.issues.map(e => ({
+                path: e.path.join("."),
+                message: e.message
+            }));
+
+            console.log("validation errors: ", errors);
+            return NextResponse.json({ message: "validation error", errors}, { status: 400 });
+
+        } else {
+            console.error(error);
+            return NextResponse.json({ error: error }, { status: 500 });
+        }
     }
 }
