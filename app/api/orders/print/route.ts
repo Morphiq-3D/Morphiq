@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
             await createAddress({userId: createdUser[0].id, ...address});
 
             console.log(`user with email ${user.email} does not exist, created a new user account`);
-            sendWelcomeEmail(user.email);
+            await sendWelcomeEmail(user.email);
         } else {
             order.userId = searchResult[0].id;
 
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         }
 
         console.log("order created successfully");
-        sendPrintOrderConfirmationEmail(user.email);
+        await sendPrintOrderConfirmationEmail(user.email);
         return NextResponse.json({ message: "order created successfully" }, { status: 201 });
 
 
