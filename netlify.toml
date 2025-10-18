@@ -1,0 +1,5 @@
+# netlify.toml
+
+[dev]
+    # Use this to skip the blob upload step specifically for local builds/serves.
+    environment = { NETLIFY_BLOBS_CONTEXT = "production" }
